@@ -1,1 +1,29 @@
-<p>admin-product works!</p>
+<p>
+  <a routerLink="/admin/product/new" class="btn btn-primary">New Product <i class="fa fa-plus ml-1"></i></a>
+</p>
+
+<table class="table">
+  <thead>
+    <tr class="col-5">
+      <th>Title</th>
+      <th>Price</th>
+      <th>Category</th>
+      <th class="img-title">ImageUrl</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of productList">
+      <td>{{ p.title }}</td>
+      <td>{{ p.price }}</td>
+      <td>{{ p.category }}</td>
+      <td>
+        <img class="img-contain"[src] ="p.imageUrl"></td>
+      <td>
+        <a class="btn btn-primary" [routerLink]="['/admin/product-edit/']">
+        View
+      </a>
+      </td>
+    </tr>
+  </tbody>
+</table> 
