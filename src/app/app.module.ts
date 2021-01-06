@@ -2,9 +2,9 @@ import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { CustomFormsModule } from 'ng2-validation';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,6 +30,9 @@ import { ProductFormComponent } from './admin/product-from/product-from.componen
 import { CategoryService } from './service/category/category.service';
 import { ProductService } from './service/product/product.service';
 import { ProductEditComponent } from './admin/product-edit/product-edit.component';
+import { ProductCardComponent } from './product-card/product-card.component';
+import { ShoppingCartService } from './service/shopping-cart/shopping-cart.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -46,40 +49,44 @@ import { ProductEditComponent } from './admin/product-edit/product-edit.componen
     MyOrderComponent,
     ProductFormComponent,
     ProductEditComponent,
+    ProductCardComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFirestoreModule,
+    FormsModule,
     CustomFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    FormsModule,
     NgxDatatableModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent },
+      { path: '', component: ProductComponent },
       { path: 'product', component: ProductComponent },
       { path: 'cart', component: CartComponent },
       { path: 'login', component: LoginComponent },
 
-      { path: 'check-out', component: CheckOutComponent },
-      { path: 'order-success', component: OrderSuccessComponent },
-      { path: 'my-order', component: MyOrderComponent },
+      { path: 'check-out', component: CheckOutComponent, canActivate: [GuardService] },
+      { path: 'order-success', component: OrderSuccessComponent, canActivate: [GuardService] },
+      { path: 'my-order', component: MyOrderComponent, canActivate: [GuardService] },
 
-      { path: 'admin/product/new', component: ProductFormComponent },
-      { path: 'admin/product', component: AdminProductComponent },
-      { path: 'admin/product-edit', component: ProductEditComponent },
-      { path: 'admin/order', component: AdminOrderComponent },
+      { path: 'admin/product/new', component: ProductFormComponent, canActivate: [GuardService] },
+      { path: 'admin/product/:id', component: ProductFormComponent, canActivate: [GuardService] },
+      { path: 'admin/product', component: AdminProductComponent, canActivate: [GuardService] },
+      { path: 'admin/order', component: AdminOrderComponent, canActivate: [GuardService] },
 
     ]),
     NgbModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     GuardService,
     AuthService,
     CategoryService,
     ProductService,
+    ShoppingCartService
   ],
   bootstrap: [AppComponent]
 })

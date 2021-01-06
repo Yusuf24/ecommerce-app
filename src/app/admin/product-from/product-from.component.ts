@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs/operators';
+import { CategoryService } from 'src/app/service/category/category.service';
+import { Product } from 'src/app/service/product/product.model';
 import { ProductService } from '../../service/product/product.service';
 
 @Component({
@@ -7,71 +11,37 @@ import { ProductService } from '../../service/product/product.service';
   styleUrls: ['./product-from.component.scss']
 })
 
-export class ProductFormComponent {
+export class ProductFormComponent implements OnInit {
 
-product: any;
-title:string;
-price:number;
-category:string;
-imageUrl:string;
-message:string;
+  categories: any[];
+  product: any=[];
+  id;
 
-
-  constructor(public productService:ProductService){
-  }
-
-ngOnInit() {
-  }
-
-  CreateRecord()
-  {
-    let Record = {};
-    Record['title'] = this.title;
-    Record['price'] = this.price;
-    Record['category'] = this.category;
-    Record['imageUrl'] = this.imageUrl;
-
-    this.productService.create(Record).then(res => {
-
-        this.title = "";
-        this.price = undefined;
-        this.category ="";
-        this.imageUrl="";
-        console.log(res);
-        this.message = "Employee data save Done";
-    }).catch(error => {
-      console.log(error);
-    });
-    
-  }
-
-  EditRecord(Record)
-  {
-    Record.isedit = true;
-    Record.editTitle = Record.title;
-    Record.editPrice = Record.price;
-    Record.editCategory = Record.category;
-    Record.editImageUrl = Record.imageUrl;
-
-  }
-
-  Updatarecord(recorddata)
-  {
-    let record = {};
-    record['title'] = recorddata.editTitle;
-    record['price'] = recorddata.editPrice;
-    record['imageUrl'] = recorddata.editImageUrl;
-    record['category'] = recorddata.editCategory;
-    this.productService.update(recorddata.id, record);
-    recorddata.isedit = false;
-  }
-
-  Deleteemployee(record_id)
-  {
-    this.productService.delete(record_id);
-  }
-
-
-
-
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute,
+    private categoryService: CategoryService, 
+    private productService: ProductService,
+    ) {
+     this.id= this.route.snapshot.paramMap.get('id');
+     if(this.id) this.productService.get(this.id).pipe(take(1)).subscribe(p => this.product = p);
 }
+
+save(product) {
+  if (this.id) this.productService.update(this.id, product);
+  else this.productService.create(product);
+  this.router.navigate(['/admin/product/']);
+  
+  }
+
+  delete() {
+    if(!confirm ('Are you ready')) return;
+
+    this.productService.delete(this.id);
+    this.router.navigate(['admin/product'])
+  }
+
+  ngOnInit() {
+    this.categoryService.getCategories().subscribe(c => this.categories = c)
+  }
+  }

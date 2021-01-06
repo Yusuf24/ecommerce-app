@@ -4,7 +4,7 @@
 
 <table class="table">
   <thead>
-    <tr class="col-5">
+    <tr class="col">
       <th>Title</th>
       <th>Price</th>
       <th>Category</th>
@@ -13,16 +13,16 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let p of productList">
+    <tr *ngFor="let p of products">
       <td>{{ p.title }}</td>
       <td>{{ p.price }}</td>
       <td>{{ p.category }}</td>
       <td>
         <img class="img-contain"[src] ="p.imageUrl"></td>
       <td>
-        <a class="btn btn-primary" [routerLink]="['/admin/product-edit/']">
-        View
-      </a>
+        <a class= "btn btn-outline-primary" [routerLink]="['/admin/product', p.key]">
+          <i class="bi bi-pencil-square"></i>
+        </a>
       </td>
     </tr>
   </tbody>

@@ -1,4 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { map, mergeMap, take } from 'rxjs/operators';
+import { CategoryService } from 'src/app/service/category/category.service';
 import { ProductService } from 'src/app/service/product/product.service';
 
 @Component({
@@ -6,28 +9,34 @@ import { ProductService } from 'src/app/service/product/product.service';
   templateUrl: './admin-product.component.html',
   styleUrls: ['./admin-product.component.scss']
 })
-export class AdminProductComponent implements OnInit {
+export class AdminProductComponent implements OnInit,OnDestroy {
 
-   productList: any;
+  categories: any[];
+  products: any[];
+  sub: Subscription;
 
-   constructor(private productService: ProductService) {}
-   ngOnInit() {
-    this.productService.getAll().subscribe(data => {
+  constructor(private productService: ProductService, public categoryService: CategoryService) { }
 
-      this.productList = data.map(e => {
-        return {
-          id: e.payload.doc.id,
-          isedit: false,
-          title: e.payload.doc.data()['title'],
-          price: e.payload.doc.data()['price'],
-          category: e.payload.doc.data()['category'],
-          imageUrl: e.payload.doc.data()['imageUrl'],
-        };
-      })
-      console.log(this.productList);
-
-    });
+  ngOnInit() {
+    this.sub = this.categoryService.getCategories()
+      .pipe(
+        mergeMap(categories => this.productService.getAll().pipe(
+          map(products => [categories, products])
+        ))).subscribe(([categories, products]) => {
+          this.categories = categories;
+          this.products = products;
+          console.log(categories);
+          console.log(products);
+        });
   }
 
-  
+  getProductCategory(key){
+
+    return this.products.filter(p => p.category==key)
   }
+
+  ngOnDestroy():void{
+    this.sub.unsubscribe();
+  }
+
+}
