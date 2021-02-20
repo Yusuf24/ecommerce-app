@@ -10,13 +10,9 @@
             <li class="nav-item">
                 <a class="nav-link" routerLink="/cart">
                     Cart
-                    <span *ngIf="shoppingCartItemCount === 0; else showBadge">
+                        <span class="badge badge-warning badge-pill" *ngIf="cart$ | async as cart">
+                        {{ cart.totalItemsCount }}
                     </span>
-                    <ng-template #showBadge>
-                        <span class="badge badge-warning badge-pill">
-                        {{ shoppingCartItemCount }}
-                    </span>
-                    </ng-template>
                 </a>
             </li>
             <ng-template #guest>

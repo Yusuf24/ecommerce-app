@@ -1,14 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Product } from '../service/product/product.model';
 import { ShoppingCart } from '../service/shopping-cart/shopping-cart';
 import { ShoppingCartService } from '../service/shopping-cart/shopping-cart.service';
 
 @Component({
-  selector: 'product-card',
-  templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.scss']
+  selector: 'product-quantity',
+  templateUrl: './product-quantity.component.html',
+  styleUrls: ['./product-quantity.component.scss']
 })
-export class ProductCardComponent{
+export class ProductQuantityComponent{
+
   @Input ('product') product: Product;
   @Input ('shopping-cart') shoppingCart;
   
@@ -28,4 +30,5 @@ export class ProductCardComponent{
     let item = this.shoppingCart.items[this.product.key];
     return item ? item.quantity: 0
   }
+
 }

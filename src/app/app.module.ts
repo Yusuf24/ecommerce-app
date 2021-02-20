@@ -33,6 +33,7 @@ import { ProductEditComponent } from './admin/product-edit/product-edit.componen
 import { ProductCardComponent } from './product-card/product-card.component';
 import { ShoppingCartService } from './service/shopping-cart/shopping-cart.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ProductQuantityComponent } from './product-quantity/product-quantity.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ProductFormComponent,
     ProductEditComponent,
     ProductCardComponent,
+    ProductQuantityComponent,
   ],
   imports: [
     BrowserModule,
